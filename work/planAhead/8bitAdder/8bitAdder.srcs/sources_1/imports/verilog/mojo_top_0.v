@@ -7,6 +7,7 @@
 module mojo_top_0 (
     input clk,
     input rst_n,
+    output reg [7:0] led,
     output reg spi_miso,
     output reg [3:0] spi_channel,
     output reg avr_rx,
@@ -44,7 +45,7 @@ module mojo_top_0 (
   wire [1-1:0] M_add_n;
   reg [8-1:0] M_add_a;
   reg [8-1:0] M_add_b;
-  reg [0-1:0] M_add_alufn;
+  reg [1-1:0] M_add_alufn;
   adder_3 add (
     .a(M_add_a),
     .b(M_add_b),
@@ -71,6 +72,7 @@ module mojo_top_0 (
   always @* begin
     M_reset_cond_in = ~rst_n;
     rst = M_reset_cond_out;
+    led = 8'h00;
     spi_miso = 1'bz;
     spi_channel = 4'bzzzz;
     avr_rx = 1'bz;
@@ -78,11 +80,9 @@ module mojo_top_0 (
     io_seg = 8'hff;
     io_seg = ~M_seg_seg;
     io_sel = ~M_seg_sel;
-    io_led[16+7-:8] = io_dip[16+7-:8];
-    io_led[8+7-:8] = io_dip[8+7-:8];
     
     case (io_dip[0+4+1-:2])
-      6'b00xxxx: begin
+      1'h0: begin
         M_seg_values = 16'h0115;
         M_add_a = io_dip[16+7-:8];
         M_add_b = io_dip[8+7-:8];
@@ -93,28 +93,30 @@ module mojo_top_0 (
         M_compare_n = 1'h0;
         M_compare_alufn = 8'h00;
       end
-      6'b11xxxx: begin
+      2'h3: begin
         M_seg_values = 16'h2334;
         M_compare_z = M_add_z;
         M_compare_v = M_add_v;
         M_compare_n = M_add_n;
-        M_compare_alufn = io_dip[0+2+0-:1];
+        M_compare_alufn = io_dip[0+1+1-:2];
         io_led[0+7-:8] = M_compare_op;
-        M_add_a = 8'h00;
-        M_add_b = 8'h00;
-        M_add_alufn = 8'h00;
+        M_add_a = io_dip[16+7-:8];
+        M_add_b = io_dip[8+7-:8];
+        M_add_alufn = io_dip[0+0+0-:1];
       end
       default: begin
         M_seg_values = 16'h5555;
         M_add_a = 8'h00;
         M_add_b = 8'h00;
         M_add_alufn = 8'h00;
-        M_compare_z = 1'h0;
-        M_compare_v = 1'h0;
-        M_compare_n = 1'h0;
+        M_compare_z = M_add_z;
+        M_compare_v = M_add_v;
+        M_compare_n = M_add_n;
         M_compare_alufn = 8'h00;
         io_led[0+7-:8] = 8'h00;
       end
     endcase
+    io_led[16+7-:8] = io_dip[16+7-:8];
+    io_led[8+7-:8] = io_dip[8+7-:8];
   end
 endmodule

@@ -16,7 +16,7 @@ module comparator ( // computes CMPEQ, CMPLT, CMPLE of A to B, gives op
        case binary 10: CMPLT ie compare less than, A<B 
        case binary 11: CMPLE ie compare less equals, A<=B
     */
-    case(alufn[1:0]){
+    case(alufn){
       b01: 
         result = z; // equation lsb = z 
       b10: 

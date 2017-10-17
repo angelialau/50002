@@ -1,7 +1,7 @@
 module adder ( //computes ADD and SUB of inputs a and b to give output op 
     input a[8],  // input 1 =a
     input b[8],  // input 2 = b
-    input alufn[0], //takes in alufn, if [0] = 0: ADD, =1: SUB 
+    input alufn[1], //takes in alufn, if [0] = 0: ADD, =1: SUB 
     output op[8], // output 
     output z, // zero: output 1 if all digits of op are 0 
     output v, // overflow: output 1 if op width is larger than 8 bits

@@ -7,7 +7,7 @@
 module adder_3 (
     input [7:0] a,
     input [7:0] b,
-    input [-1:0] alufn,
+    input [0:0] alufn,
     output reg [7:0] op,
     output reg z,
     output reg v,

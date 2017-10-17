@@ -19,7 +19,7 @@ module comparator_4 (
   always @* begin
     op = 8'h00;
     
-    case (alufn[0+1-:2])
+    case (alufn)
       2'h1: begin
         result = z;
       end
